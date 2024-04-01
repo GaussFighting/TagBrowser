@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 const useFetchTags = () => {
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState([]);
+  const [tags, setTags] = useState({});
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -12,6 +12,7 @@ const useFetchTags = () => {
           `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&site=stackoverflow`
         );
         const resData = await res.json();
+        console.log(resData);
         setTags(resData);
         setLoading(false);
       } catch (error) {
@@ -21,7 +22,7 @@ const useFetchTags = () => {
     };
     fetchTags();
   }, []);
-  return { loading, tags, setTags };
+  return { loading, tags };
 };
 
 export default useFetchTags;

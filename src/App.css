@@ -36,3 +36,7 @@
     transform: rotate(360deg);
   }
 }
+.MuiDataGrid-root.MuiDataGrid-root--densityStandard.MuiDataGrid-withBorderColor.css-qcqlck-MuiDataGrid-root{
+  display: "flex" !important;
+  flex-direction: "column-reverse" !important;
+}
