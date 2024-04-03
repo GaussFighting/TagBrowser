@@ -2,27 +2,30 @@ import { useEffect, useState } from "react";
 
 const useFetchTags = () => {
   const [loading, setLoading] = useState(false);
-  const [tags, setTags] = useState({});
+  const [tagsObj, setTagsObj] = useState({});
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchTags = async () => {
+      let res = {};
       try {
         setLoading(true);
-        const res = await fetch(
+        res = await fetch(
           `https://api.stackexchange.com/2.3/tags?order=desc&sort=popular&site=stackoverflow`
         );
         const resData = await res.json();
-        console.log(resData);
-        setTags(resData);
+        setTagsObj(resData);
         setLoading(false);
       } catch (error) {
         setLoading(false);
-        console.log(error);
+      }
+      if (!(200 <= res.status && res.status < 300)) {
+        setError("error - status is not 2XX");
       }
     };
     fetchTags();
   }, []);
-  return { loading, tags };
+  return { loading, tagsObj, error };
 };
 
 export default useFetchTags;
