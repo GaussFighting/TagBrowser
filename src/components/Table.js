@@ -7,12 +7,11 @@ import {
   useGridApiContext,
   useGridSelector,
 } from "@mui/x-data-grid";
-import useFetchTags from "../hooks/useFetchTags";
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MuiPagination from "@mui/material/Pagination";
 
-function Pagination({ page, onPageChange, className }) {
+const Pagination = ({ page, onPageChange, className }) => {
   const apiRef = useGridApiContext();
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
@@ -27,14 +26,13 @@ function Pagination({ page, onPageChange, className }) {
       }}
     />
   );
-}
+};
 
-function CustomPagination(props) {
+const CustomPagination = (props) => {
   return <GridPagination ActionsComponent={Pagination} {...props} />;
-}
+};
 
-const Table = () => {
-  const { loading, tags } = useFetchTags();
+const Table = ({ loading, items = [] }) => {
   const toastId = React.useRef(null);
 
   useEffect(() => {
@@ -63,16 +61,12 @@ const Table = () => {
       width: 90,
     },
   ];
-  if (Object.keys(tags).length) {
-    const rows = () => {
-      let rows = [];
-      tags.items.map((el, idx) => {
-        rows = [...rows, { id: idx + 1, tagName: el.name, count: el.count }];
-        return rows;
-      });
-      return rows;
-    };
-
+  let rows = items.map((el, idx) => ({
+    id: idx + 1,
+    tagName: el.name,
+    count: el.count,
+  }));
+  if (rows.length > 0) {
     return (
       <div className="data-grid">
         <DataGrid
@@ -81,7 +75,7 @@ const Table = () => {
           slots={{
             pagination: CustomPagination,
           }}
-          rows={rows()}
+          rows={rows}
           columns={columns}
           initialState={{
             pagination: {
@@ -94,6 +88,8 @@ const Table = () => {
         />
       </div>
     );
+  } else {
+    return null;
   }
 };
 

@@ -28,4 +28,12 @@ body {
     flex-direction: column-reverse !important;
   }
   
-  
+  .error{
+    margin: auto;
+    display: flex;
+    justify-content: center;
+    padding: 50px;
+    border: 1px solid black;
+    background: red;
+    color: white
+  }
