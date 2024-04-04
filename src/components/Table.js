@@ -10,11 +10,15 @@ import {
 import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import MuiPagination from "@mui/material/Pagination";
+import storybookData from "../storybook_data/storybookData";
+import "../styles/index.scss";
+import PropTypes from 'prop-types';
 
 const Pagination = ({ page, onPageChange, className }) => {
   const apiRef = useGridApiContext();
   const pageCount = useGridSelector(apiRef, gridPageCountSelector);
 
+  
   return (
     <MuiPagination
       color="primary"
@@ -32,7 +36,7 @@ const CustomPagination = (props) => {
   return <GridPagination ActionsComponent={Pagination} {...props} />;
 };
 
-const Table = ({ loading, items = [] }) => {
+const Table = ({ loading, items = [], autoHeight }) => {
   const toastId = React.useRef(null);
 
   useEffect(() => {
@@ -66,31 +70,43 @@ const Table = ({ loading, items = [] }) => {
     tagName: el.name,
     count: el.count,
   }));
-  if (rows.length > 0) {
-    return (
-      <div className="data-grid">
-        <DataGrid
-          className="pagination-top"
-          pagination
-          slots={{
-            pagination: CustomPagination,
-          }}
-          rows={rows}
-          columns={columns}
-          initialState={{
-            pagination: {
-              paginationModel: { page: 0, pageSize: 5 },
-            },
-          }}
-          pageSizeOptions={[5, 10, 15, 20, 25, 30]}
-          checkboxSelection
-          autoHeight
-        />
-      </div>
-    );
-  } else {
-    return null;
-  }
+  
+  if (window.location.port === "6006") {
+    rows = storybookData.items.map((el, idx) => ({
+    id: idx + 1,
+    tagName: el.name,
+    count: el.count,
+  }))} 
+  if (rows.length === 0) return null 
+  return (
+    <div className="data-grid">
+    <DataGrid
+      className="pagination-top"
+      pagination
+      slots={{
+        pagination: CustomPagination,
+      }}
+      rows={rows}
+      columns={columns}
+      initialState={{
+        pagination: {
+          paginationModel: { page: 0, pageSize: 5 },
+        },
+      }}
+      pageSizeOptions={[5, 10, 15, 20, 25, 30]}
+      checkboxSelection
+      autoHeight={autoHeight}
+    />
+  </div>
+  )
 };
 
 export default Table;
+
+Table.propTypes = {
+  autoHeight: PropTypes.bool,
+}
+
+Table.defaultProps = {
+  autoHeight: true,
+};

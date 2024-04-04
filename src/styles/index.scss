@@ -28,12 +28,35 @@ body {
     flex-direction: column-reverse !important;
   }
   
-  .error{
+  // Error.js component
+  .storybook-error{
     margin: auto;
     display: flex;
     justify-content: center;
     padding: 50px;
     border: 1px solid black;
-    background: red;
-    color: white
   }
+
+  .storybook-error--primary {
+    color: green;
+    background-color: #1ea7fd;
+  }
+
+  .storybook-error--secondary {
+    color: white;
+    background-color: red;
+  }
+
+  .storybook-error--small {
+    font-size: 16px;
+    margin: 100px;
+    padding: 10px 16px;
+  }
+
+  .storybook-error--large {
+    font-size: 24px;
+    margin: 100px;
+    padding: 12px 24px;
+  }
+
+  // Table.js Component
