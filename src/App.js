@@ -6,13 +6,13 @@ import Table from "./components/Table";
 import Error from "./components/Error";
 
 function App() {
-  const { loading, tagsObj, error } = useFetchTags();
+  const { loading, tagsObj, error, totalObj } = useFetchTags();
 
   return (
     <>
       <ToastContainer />
       <div className="container">
-        <Table loading={loading} items={tagsObj.items} />
+        <Table loading={loading} items={tagsObj.items} total={totalObj.total}/>
       </div>
       {error && <Error error={error} />}
     </>

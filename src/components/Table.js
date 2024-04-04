@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   DataGrid,
   gridPageCountSelector,
@@ -14,10 +14,10 @@ import storybookData from "../storybook_data/storybookData";
 import "../styles/index.scss";
 import PropTypes from 'prop-types';
 
-const Pagination = ({ page, onPageChange, className }) => {
+const Pagination = ({ page, onPageChange, className, total, rowsPerPage }) => {
   const apiRef = useGridApiContext();
-  const pageCount = useGridSelector(apiRef, gridPageCountSelector);
-
+  // const pageCount = useGridSelector(apiRef, gridPageCountSelector);
+  const pageCount = Math.ceil(total / rowsPerPage)
   
   return (
     <MuiPagination
@@ -33,10 +33,13 @@ const Pagination = ({ page, onPageChange, className }) => {
 };
 
 const CustomPagination = (props) => {
-  return <GridPagination ActionsComponent={Pagination} {...props} />;
+console.log(props.total)
+const [rowsPerPage, setRowsPerPage] = useState(5);
+
+  return <GridPagination rowsPerPage={rowsPerPage} onRowsPerPageChange={(event) => setRowsPerPage(event.target.value)} ActionsComponent={() => <Pagination total={props.total} rowsPerPage={rowsPerPage} />} {...props} />;
 };
 
-const Table = ({ loading, items = [], autoHeight }) => {
+const Table = ({ loading, items = [], autoHeight, total }) => {
   const toastId = React.useRef(null);
 
   useEffect(() => {
@@ -84,7 +87,7 @@ const Table = ({ loading, items = [], autoHeight }) => {
       className="pagination-top"
       pagination
       slots={{
-        pagination: CustomPagination,
+        pagination: () => <CustomPagination total={total} />,
       }}
       rows={rows}
       columns={columns}
